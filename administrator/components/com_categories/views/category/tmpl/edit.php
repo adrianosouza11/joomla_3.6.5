@@ -3,7 +3,7 @@
  * @package     Joomla.Administrator
  * @subpackage  com_categories
  *
- * @copyright   Copyright (C) 2005 - 2016 Open Source Matters, Inc. All rights reserved.
+ * @copyright   Copyright (C) 2005 - 2019 Open Source Matters, Inc. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
  */
 
@@ -14,6 +14,7 @@ JHtml::addIncludePath(JPATH_COMPONENT . '/helpers/html');
 
 JHtml::_('behavior.formvalidator');
 JHtml::_('behavior.keepalive');
+JHtml::_('formbehavior.chosen', '#jform_tags', null, array('placeholder_text_multiple' => JText::_('JGLOBAL_TYPE_OR_SELECT_SOME_TAGS')));
 JHtml::_('formbehavior.chosen', 'select');
 
 $app = JFactory::getApplication();
@@ -29,9 +30,10 @@ JFactory::getDocument()->addScriptDeclaration('
 		if (task == "category.cancel" || document.formvalidator.isValid(document.getElementById("item-form")))
 		{
 			jQuery("#permissions-sliders select").attr("disabled", "disabled");
-			' . $this->form->getField("description")->save() . '
+			' . $this->form->getField('description')->save() . '
 			Joomla.submitform(task, document.getElementById("item-form"));
 
+			// @deprecated 4.0  The following js is not needed since 3.7.0.
 			if (task !== "category.apply")
 			{
 				window.parent.jQuery("#categoryEdit' . $this->item->id . 'Modal").modal("hide");
@@ -99,6 +101,7 @@ $tmpl    = $isModal || $input->get('tmpl', '', 'cmd') === 'component' ? '&tmpl=c
 
 		<?php echo $this->form->getInput('extension'); ?>
 		<input type="hidden" name="task" value="" />
+		<input type="hidden" name="forcedLanguage" value="<?php echo $input->get('forcedLanguage', '', 'cmd'); ?>" />
 		<?php echo JHtml::_('form.token'); ?>
 	</div>
 </form>
